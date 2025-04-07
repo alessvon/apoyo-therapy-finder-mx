@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Custom colors for Red de Apoyo
+				"theme-teal": "#4ECDC4",
+				"theme-dark": "#1A535C",
+				"theme-accent": "#FF6B6B",
+				"theme-light": "#F7FFF7",
+				"theme-gray": "#E6E6E6"
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

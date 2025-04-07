@@ -1,11 +1,142 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
+import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import FilterSection from '../components/FilterSection';
+import SearchResults from '../components/SearchResults';
+import MobileFilterDrawer from '../components/MobileFilterDrawer';
+import { therapists } from '../data/therapists';
+import { TherapistFilters, Therapist, TherapyType, SessionType, Location, WeekDay, TimeSlot } from '../data/types';
+
+const Index: React.FC = () => {
+  // Initialize filters state
+  const [filters, setFilters] = useState<TherapistFilters>({
+    therapyTypes: [],
+    sessionTypes: [],
+    locations: [],
+    availability: {
+      days: [],
+      timeSlots: [],
+    },
+  });
+
+  const [filteredTherapists, setFilteredTherapists] = useState<Therapist[]>(therapists);
+  const [loading, setLoading] = useState(false);
+
+  // Reset all filters
+  const resetFilters = () => {
+    setFilters({
+      therapyTypes: [],
+      sessionTypes: [],
+      locations: [],
+      availability: {
+        days: [],
+        timeSlots: [],
+      },
+    });
+  };
+
+  // Apply filters when they change
+  useEffect(() => {
+    setLoading(true);
+    
+    // Simulate API call delay
+    const timeoutId = setTimeout(() => {
+      const newFilteredTherapists = therapists.filter(therapist => {
+        // Filter by therapy types
+        if (filters.therapyTypes.length > 0 && 
+            !therapist.specialties.some(specialty => 
+              filters.therapyTypes.includes(specialty))) {
+          return false;
+        }
+        
+        // Filter by session types
+        if (filters.sessionTypes.length > 0 && 
+            !therapist.sessionTypes.some(session => 
+              filters.sessionTypes.includes(session))) {
+          return false;
+        }
+        
+        // Filter by locations (only if in-person is selected)
+        if (filters.sessionTypes.includes('in-person') && 
+            filters.locations.length > 0 && 
+            (!therapist.locations || 
+             !therapist.locations.some(location => 
+               filters.locations.includes(location)))) {
+          return false;
+        }
+        
+        // Filter by availability days
+        if (filters.availability.days.length > 0 && 
+            !therapist.availability.some(avail => 
+              filters.availability.days.includes(avail.day))) {
+          return false;
+        }
+        
+        // Filter by time slots
+        if (filters.availability.timeSlots.length > 0 && 
+            !therapist.availability.some(avail => 
+              avail.slots.some(slot => 
+                filters.availability.timeSlots.includes(slot)))) {
+          return false;
+        }
+        
+        return true;
+      });
+      
+      setFilteredTherapists(newFilteredTherapists);
+      setLoading(false);
+    }, 500); // 500ms delay to simulate API call
+    
+    return () => clearTimeout(timeoutId);
+  }, [filters]);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen flex flex-col bg-theme-light">
+      <Header />
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-theme-dark mb-4">
+            Encuentra el terapeuta ideal para ti
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Conectamos contigo profesionales especializados según tus necesidades. Filtra por especialidad, tipo de sesión y disponibilidad.
+          </p>
+        </div>
+      
+        <div className="flex gap-8">
+          {/* Sidebar with filters - hidden on mobile */}
+          <div className="hidden md:block w-64 shrink-0">
+            <FilterSection
+              filters={filters}
+              setFilters={setFilters}
+              resetFilters={resetFilters}
+            />
+          </div>
+          
+          {/* Main content area */}
+          <div className="flex-1">
+            <div className="mb-4 flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-semibold text-theme-dark">
+                  Resultados {loading ? "" : `(${filteredTherapists.length})`}
+                </h2>
+              </div>
+              
+              {/* Mobile filter drawer */}
+              <MobileFilterDrawer 
+                filters={filters}
+                setFilters={setFilters}
+                resetFilters={resetFilters}
+              />
+            </div>
+            
+            <SearchResults 
+              therapists={filteredTherapists} 
+              loading={loading} 
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
