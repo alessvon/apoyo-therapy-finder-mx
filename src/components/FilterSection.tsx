@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { TherapistFilters, TherapyType, SessionType } from '../data/types';
+import { TherapistFilters, TherapyType, SessionType, WeekDay, Hour } from '../data/types';
 import { therapyTypeLabels, sessionTypeLabels, dayLabels, hourLabels } from '../data/therapists';
 import { countries, getStatesByCountry } from '../data/locations';
 import { Button } from "./ui/button";
@@ -65,8 +66,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
     ? getStatesByCountry(filters.location.country)
     : [];
 
-  // Update day availability filters
-  const handleDayChange = (day: string, checked: boolean) => {
+  // Update day availability filters - fix the type to use WeekDay explicitly
+  const handleDayChange = (day: WeekDay, checked: boolean) => {
     setFilters(prev => ({
       ...prev,
       availability: {
@@ -78,8 +79,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
     }));
   };
 
-  // Update time handler to use specific hours
-  const handleHourChange = (hour: string, checked: boolean) => {
+  // Update hour availability filters - fix the type to use Hour explicitly
+  const handleHourChange = (hour: Hour, checked: boolean) => {
     setFilters(prev => ({
       ...prev,
       availability: {
@@ -217,9 +218,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
                   <div key={value} className="flex items-center space-x-2">
                     <Checkbox 
                       id={`day-${value}`} 
-                      checked={filters.availability.days.includes(value as string)} 
+                      checked={filters.availability.days.includes(value as WeekDay)} 
                       onCheckedChange={(checked) => 
-                        handleDayChange(value as string, checked === true)
+                        handleDayChange(value as WeekDay, checked === true)
                       }
                     />
                     <label 
@@ -241,9 +242,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
                     <div key={value} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`hour-${value}`} 
-                        checked={filters.availability.hours.includes(value as string)} 
+                        checked={filters.availability.hours.includes(value as Hour)} 
                         onCheckedChange={(checked) => 
-                          handleHourChange(value as string, checked === true)
+                          handleHourChange(value as Hour, checked === true)
                         }
                       />
                       <label 

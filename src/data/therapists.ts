@@ -1,3 +1,4 @@
+
 import { Therapist, Hour } from './types';
 
 export const therapyTypeLabels: Record<string, string> = {
@@ -47,7 +48,7 @@ export const therapists: Therapist[] = [
     profileImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&h=256&q=80',
     specialties: ['family', 'couples'],
     sessionTypes: ['in-person', 'remote'],
-    locations: ['CDMX'],
+    location: { country: 'MX', state: 'CDMX' },
     availability: [
       { day: 'monday', hours: ['14:00', '15:00', '16:00', '17:00', '18:00'] },
       { day: 'wednesday', hours: ['09:00', '10:00', '11:00', '14:00', '15:00'] },
@@ -74,7 +75,7 @@ export const therapists: Therapist[] = [
     profileImage: 'https://images.unsplash.com/photo-1556157382-97eda2f9e8b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&h=256&q=80',
     specialties: ['gender-related', 'family'],
     sessionTypes: ['in-person', 'remote'],
-    locations: ['Puebla'],
+    location: { country: 'MX', state: 'PUE' },
     availability: [
       { day: 'monday', hours: ['09:00', '10:00', '11:00'] },
       { day: 'wednesday', hours: ['09:00', '10:00', '11:00', '14:00', '15:00'] },
@@ -88,7 +89,7 @@ export const therapists: Therapist[] = [
     profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&h=256&q=80',
     specialties: ['couples', 'grief'],
     sessionTypes: ['in-person'],
-    locations: ['Querétaro'],
+    location: { country: 'MX', state: 'QRO' },
     availability: [
       { day: 'tuesday', hours: ['09:00', '10:00', '14:00', '15:00'] },
       { day: 'thursday', hours: ['14:00', '15:00', '16:00'] },
@@ -102,7 +103,7 @@ export const therapists: Therapist[] = [
     profileImage: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&h=256&q=80',
     specialties: ['suicide-prevention', 'gender-related'],
     sessionTypes: ['in-person', 'remote'],
-    locations: ['CDMX', 'Oaxaca'],
+    location: { country: 'MX', state: 'CDMX' },
     availability: [
       { day: 'monday', hours: ['14:00', '15:00', '16:00'] },
       { day: 'wednesday', hours: ['17:00', '18:00', '19:00'] },
@@ -117,7 +118,7 @@ export const therapists: Therapist[] = [
     profileImage: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&h=256&q=80',
     specialties: ['family', 'couples', 'grief'],
     sessionTypes: ['in-person', 'remote'],
-    locations: ['Puebla'],
+    location: { country: 'MX', state: 'PUE' },
     availability: [
       { day: 'tuesday', hours: ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'] },
       { day: 'thursday', hours: ['09:00', '10:00', '11:00', '14:00', '15:00'] },
@@ -144,7 +145,7 @@ export const therapists: Therapist[] = [
     profileImage: 'https://images.unsplash.com/photo-1500048993953-d23a436266cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&h=256&q=80',
     specialties: ['family', 'grief'],
     sessionTypes: ['in-person'],
-    locations: ['Oaxaca'],
+    location: { country: 'MX', state: 'OAX' },
     availability: [
       { day: 'tuesday', hours: ['09:00', '10:00', '11:00'] },
       { day: 'thursday', hours: ['09:00', '10:00', '11:00'] },

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Therapist, Hour } from '../data/types';
 import { therapyTypeLabels, sessionTypeLabels, dayLabels, hourLabels } from '../data/therapists';
@@ -65,15 +66,13 @@ const TherapistCard: React.FC<TherapistCardProps> = ({ therapist }) => {
             </div>
           </div>
           
-          {therapist.locations && therapist.locations.length > 0 && (
+          {therapist.location && (
             <div>
               <h4 className="text-sm font-medium mb-1">Ubicación:</h4>
               <div className="flex flex-wrap gap-1">
-                {therapist.locations.map(location => (
-                  <Badge key={location} variant="outline" className="bg-theme-light border-theme-gray">
-                    <MapPin size={12} className="mr-1" /> {location}
-                  </Badge>
-                ))}
+                <Badge variant="outline" className="bg-theme-light border-theme-gray">
+                  <MapPin size={12} className="mr-1" /> {therapist.location.state}
+                </Badge>
               </div>
             </div>
           )}

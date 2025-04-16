@@ -1,16 +1,17 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import FilterSection from '../components/FilterSection';
 import SearchResults from '../components/SearchResults';
 import MobileFilterDrawer from '../components/MobileFilterDrawer';
 import { therapists } from '../data/therapists';
-import { TherapistFilters, Therapist, TherapyType, SessionType, Location, WeekDay, Hour } from '../data/types';
+import { TherapistFilters, Therapist, TherapyType, SessionType, WeekDay, Hour } from '../data/types';
 
 const Index: React.FC = () => {
   const [filters, setFilters] = useState<TherapistFilters>({
     therapyTypes: [],
     sessionTypes: [],
-    locations: [],
+    location: undefined,
     availability: {
       days: [],
       hours: [],
@@ -25,7 +26,7 @@ const Index: React.FC = () => {
     setFilters({
       therapyTypes: [],
       sessionTypes: [],
-      locations: [],
+      location: undefined,
       availability: {
         days: [],
         hours: [],
@@ -52,12 +53,17 @@ const Index: React.FC = () => {
           return false;
         }
         
-        // Filter by locations (only if in-person is selected)
+        // Filter by location (only if in-person is selected)
         if (filters.sessionTypes.includes('in-person') && 
-            filters.locations.length > 0 && 
-            (!therapist.locations || 
-             !therapist.locations.some(location => 
-               filters.locations.includes(location)))) {
+            filters.location?.country && 
+            (!therapist.location || therapist.location.country !== filters.location.country)) {
+          return false;
+        }
+
+        // Filter by state if both country and state are selected
+        if (filters.sessionTypes.includes('in-person') && 
+            filters.location?.country && filters.location?.state && 
+            (!therapist.location || therapist.location.state !== filters.location.state)) {
           return false;
         }
         
