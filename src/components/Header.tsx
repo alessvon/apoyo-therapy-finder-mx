@@ -1,15 +1,10 @@
-
 import React from 'react';
-
 const Header: React.FC = () => {
-  return (
-    <header className="bg-white py-4 border-b border-gray-200">
+  return <header className="bg-white py-4 border-b border-gray-200">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="text-theme-teal text-3xl font-bold">
-              Red de Apoyo
-            </div>
+            <div className="text-theme-teal text-3xl font-bold">Comunidad de Terapeutas</div>
           </div>
           <nav className="hidden md:flex space-x-8">
             <a href="#" className="text-theme-dark hover:text-theme-teal">Inicio</a>
@@ -26,8 +21,6 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
-    </header>
-  );
+    </header>;
 };
-
 export default Header;
