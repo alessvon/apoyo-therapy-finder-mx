@@ -1,8 +1,10 @@
 import React from 'react';
-import { TherapistFilters, TherapyType, SessionType, Location, WeekDay, Hour } from '../data/types';
+import { TherapistFilters, TherapyType, SessionType } from '../data/types';
 import { therapyTypeLabels, sessionTypeLabels, dayLabels, hourLabels } from '../data/therapists';
+import { countries, getStatesByCountry } from '../data/locations';
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { 
   Card,
   CardContent,
@@ -39,17 +41,32 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
   };
 
   // Update location filters
-  const handleLocationChange = (location: Location, checked: boolean) => {
+  const handleCountryChange = (countryCode: string) => {
     setFilters(prev => ({
       ...prev,
-      locations: checked 
-        ? [...prev.locations, location]
-        : prev.locations.filter(l => l !== location)
+      location: {
+        country: countryCode,
+        state: undefined
+      }
     }));
   };
 
+  const handleStateChange = (stateCode: string) => {
+    setFilters(prev => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        state: stateCode
+      }
+    }));
+  };
+
+  const availableStates = filters.location?.country 
+    ? getStatesByCountry(filters.location.country)
+    : [];
+
   // Update day availability filters
-  const handleDayChange = (day: WeekDay, checked: boolean) => {
+  const handleDayChange = (day: string, checked: boolean) => {
     setFilters(prev => ({
       ...prev,
       availability: {
@@ -62,7 +79,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
   };
 
   // Update time handler to use specific hours
-  const handleHourChange = (hour: Hour, checked: boolean) => {
+  const handleHourChange = (hour: string, checked: boolean) => {
     setFilters(prev => ({
       ...prev,
       availability: {
@@ -146,26 +163,43 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
         <CardHeader className="pb-2">
           <CardTitle className="text-md">Ubicación</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <div className="space-y-2">
-            {['Puebla', 'Querétaro', 'CDMX', 'Oaxaca'].map((location) => (
-              <div key={location} className="flex items-center space-x-2">
-                <Checkbox 
-                  id={`location-${location}`} 
-                  checked={filters.locations.includes(location as Location)} 
-                  onCheckedChange={(checked) => 
-                    handleLocationChange(location as Location, checked === true)
-                  }
-                  disabled={!filters.sessionTypes.includes('in-person')}
-                />
-                <label 
-                  htmlFor={`location-${location}`} 
-                  className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed ${!filters.sessionTypes.includes('in-person') ? 'text-gray-400' : ''}`}
-                >
-                  {location}
-                </label>
-              </div>
-            ))}
+            <Select
+              value={filters.location?.country}
+              onValueChange={handleCountryChange}
+              disabled={!filters.sessionTypes.includes('in-person')}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecciona un país" />
+              </SelectTrigger>
+              <SelectContent>
+                {countries.map((country) => (
+                  <SelectItem key={country.code} value={country.code}>
+                    {country.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {filters.location?.country && (
+              <Select
+                value={filters.location?.state}
+                onValueChange={handleStateChange}
+                disabled={!filters.sessionTypes.includes('in-person')}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Selecciona un estado" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableStates.map((state) => (
+                    <SelectItem key={state.code} value={state.code}>
+                      {state.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -183,9 +217,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
                   <div key={value} className="flex items-center space-x-2">
                     <Checkbox 
                       id={`day-${value}`} 
-                      checked={filters.availability.days.includes(value as WeekDay)} 
+                      checked={filters.availability.days.includes(value as string)} 
                       onCheckedChange={(checked) => 
-                        handleDayChange(value as WeekDay, checked === true)
+                        handleDayChange(value as string, checked === true)
                       }
                     />
                     <label 
@@ -207,9 +241,9 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
                     <div key={value} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`hour-${value}`} 
-                        checked={filters.availability.hours.includes(value as Hour)} 
+                        checked={filters.availability.hours.includes(value as string)} 
                         onCheckedChange={(checked) => 
-                          handleHourChange(value as Hour, checked === true)
+                          handleHourChange(value as string, checked === true)
                         }
                       />
                       <label 

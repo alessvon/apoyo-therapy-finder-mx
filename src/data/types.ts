@@ -7,7 +7,21 @@ export type TherapyType =
 
 export type SessionType = 'in-person' | 'remote';
 
-export type Location = 'Puebla' | 'Querétaro' | 'CDMX' | 'Oaxaca';
+export interface State {
+  name: string;
+  code: string;
+}
+
+export interface Country {
+  name: string;
+  code: string;
+  states: State[];
+}
+
+export type Location = {
+  country: string;
+  state: string;
+};
 
 export type WeekDay = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 
@@ -27,7 +41,7 @@ export interface Therapist {
   profileImage: string;
   specialties: TherapyType[];
   sessionTypes: SessionType[];
-  locations?: Location[]; // Optional if remote only
+  location?: Location; // Optional if remote only
   availability: Availability[];
   bio?: string;
 }
@@ -35,7 +49,10 @@ export interface Therapist {
 export interface TherapistFilters {
   therapyTypes: TherapyType[];
   sessionTypes: SessionType[];
-  locations: Location[];
+  location?: {
+    country?: string;
+    state?: string;
+  };
   availability: {
     days: WeekDay[];
     hours: Hour[];
