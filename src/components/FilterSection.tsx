@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { TherapistFilters, TherapyType, SessionType, Location, WeekDay, TimeSlot } from '../data/types';
-import { therapyTypeLabels, sessionTypeLabels, dayLabels, timeSlotLabels } from '../data/therapists';
+import { TherapistFilters, TherapyType, SessionType, Location, WeekDay, Hour } from '../data/types';
+import { therapyTypeLabels, sessionTypeLabels, dayLabels, hourLabels } from '../data/therapists';
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { 
@@ -10,6 +9,7 @@ import {
   CardHeader,
   CardTitle
 } from "./ui/card";
+import { ScrollArea } from "./ui/scroll-area";
 
 interface FilterSectionProps {
   filters: TherapistFilters;
@@ -61,15 +61,15 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
     }));
   };
 
-  // Update time slot filters
-  const handleTimeSlotChange = (slot: TimeSlot, checked: boolean) => {
+  // Update time handler to use specific hours
+  const handleHourChange = (hour: Hour, checked: boolean) => {
     setFilters(prev => ({
       ...prev,
       availability: {
         ...prev.availability,
-        timeSlots: checked 
-          ? [...prev.availability.timeSlots, slot]
-          : prev.availability.timeSlots.filter(s => s !== slot)
+        hours: checked 
+          ? [...prev.availability.hours, hour]
+          : prev.availability.hours.filter(h => h !== hour)
       }
     }));
   };
@@ -200,26 +200,28 @@ const FilterSection: React.FC<FilterSectionProps> = ({ filters, setFilters, rese
             </div>
             
             <div>
-              <h3 className="text-sm font-medium mb-2">Horarios</h3>
-              <div className="space-y-2">
-                {Object.entries(timeSlotLabels).map(([value, label]) => (
-                  <div key={value} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={`time-${value}`} 
-                      checked={filters.availability.timeSlots.includes(value as TimeSlot)} 
-                      onCheckedChange={(checked) => 
-                        handleTimeSlotChange(value as TimeSlot, checked === true)
-                      }
-                    />
-                    <label 
-                      htmlFor={`time-${value}`} 
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {label}
-                    </label>
-                  </div>
-                ))}
-              </div>
+              <h3 className="text-sm font-medium mb-2">Horarios disponibles</h3>
+              <ScrollArea className="h-[200px] pr-4">
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.entries(hourLabels).map(([value, label]) => (
+                    <div key={value} className="flex items-center space-x-2">
+                      <Checkbox 
+                        id={`hour-${value}`} 
+                        checked={filters.availability.hours.includes(value as Hour)} 
+                        onCheckedChange={(checked) => 
+                          handleHourChange(value as Hour, checked === true)
+                        }
+                      />
+                      <label 
+                        htmlFor={`hour-${value}`} 
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           </div>
         </CardContent>

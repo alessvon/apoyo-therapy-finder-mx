@@ -1,21 +1,19 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import FilterSection from '../components/FilterSection';
 import SearchResults from '../components/SearchResults';
 import MobileFilterDrawer from '../components/MobileFilterDrawer';
 import { therapists } from '../data/therapists';
-import { TherapistFilters, Therapist, TherapyType, SessionType, Location, WeekDay, TimeSlot } from '../data/types';
+import { TherapistFilters, Therapist, TherapyType, SessionType, Location, WeekDay, Hour } from '../data/types';
 
 const Index: React.FC = () => {
-  // Initialize filters state
   const [filters, setFilters] = useState<TherapistFilters>({
     therapyTypes: [],
     sessionTypes: [],
     locations: [],
     availability: {
       days: [],
-      timeSlots: [],
+      hours: [],
     },
   });
 
@@ -30,16 +28,14 @@ const Index: React.FC = () => {
       locations: [],
       availability: {
         days: [],
-        timeSlots: [],
+        hours: [],
       },
     });
   };
 
-  // Apply filters when they change
   useEffect(() => {
     setLoading(true);
     
-    // Simulate API call delay
     const timeoutId = setTimeout(() => {
       const newFilteredTherapists = therapists.filter(therapist => {
         // Filter by therapy types
@@ -72,11 +68,11 @@ const Index: React.FC = () => {
           return false;
         }
         
-        // Filter by time slots
-        if (filters.availability.timeSlots.length > 0 && 
+        // Filter by specific hours
+        if (filters.availability.hours.length > 0 && 
             !therapist.availability.some(avail => 
-              avail.slots.some(slot => 
-                filters.availability.timeSlots.includes(slot)))) {
+              avail.hours.some(hour => 
+                filters.availability.hours.includes(hour)))) {
           return false;
         }
         
@@ -85,7 +81,7 @@ const Index: React.FC = () => {
       
       setFilteredTherapists(newFilteredTherapists);
       setLoading(false);
-    }, 500); // 500ms delay to simulate API call
+    }, 500);
     
     return () => clearTimeout(timeoutId);
   }, [filters]);

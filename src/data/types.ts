@@ -1,4 +1,3 @@
-
 export type TherapyType = 
   | 'family'
   | 'couples'
@@ -12,15 +11,15 @@ export type Location = 'Puebla' | 'Querétaro' | 'CDMX' | 'Oaxaca';
 
 export type WeekDay = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 
-export type TimeSlot = 
-  | 'morning' // 8am-12pm
-  | 'afternoon' // 12pm-5pm
-  | 'evening'; // 5pm-9pm
+export type Hour = 
+  | '08:00' | '09:00' | '10:00' | '11:00' 
+  | '12:00' | '13:00' | '14:00' | '15:00' | '16:00' 
+  | '17:00' | '18:00' | '19:00' | '20:00' | '21:00';
 
-export interface Availability {
+export type Availability = {
   day: WeekDay;
-  slots: TimeSlot[];
-}
+  hours: Hour[];
+};
 
 export interface Therapist {
   id: string;
@@ -39,6 +38,6 @@ export interface TherapistFilters {
   locations: Location[];
   availability: {
     days: WeekDay[];
-    timeSlots: TimeSlot[];
+    hours: Hour[];
   };
 }

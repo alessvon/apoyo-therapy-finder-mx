@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { Therapist } from '../data/types';
-import { therapyTypeLabels, sessionTypeLabels, dayLabels, timeSlotLabels } from '../data/therapists';
+import { Therapist, Hour } from '../data/types';
+import { therapyTypeLabels, sessionTypeLabels, dayLabels, hourLabels } from '../data/therapists';
 import { Button } from './ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -19,6 +18,10 @@ const TherapistCard: React.FC<TherapistCardProps> = ({ therapist }) => {
       .join('')
       .toUpperCase()
       .substring(0, 2);
+  };
+
+  const formatHours = (hours: Hour[]) => {
+    return hours.sort().map(hour => hourLabels[hour]).join(', ');
   };
 
   return (
@@ -81,7 +84,7 @@ const TherapistCard: React.FC<TherapistCardProps> = ({ therapist }) => {
               {therapist.availability.map((avail, idx) => (
                 <div key={idx} className="text-xs">
                   <span className="font-medium">{dayLabels[avail.day]}: </span>
-                  {avail.slots.map(slot => timeSlotLabels[slot].split(' ')[0]).join(', ')}
+                  {formatHours(avail.hours)}
                 </div>
               ))}
             </div>
